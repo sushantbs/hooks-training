@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+import Login from "./pages/Login/Login";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    authComplete: false,
+    isAuthenticated: null
+  }
+  async componentDidMount() {
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    this.setState({
+      authComplete: true,
+      isAuthenticated: false
+    })
+  }
+
+  render() {
+    return (
+      <Router>
+        <div className="App">
+          <Route path="/login" component={Login} />
+        </div>
+        {
+          this.state.authComplete && !this.state.isAuthenticated ? <Redirect to="/login" /> : null
+        }
+      </Router>
+    );
+  }
 }
 
 export default App;

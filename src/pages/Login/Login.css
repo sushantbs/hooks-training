@@ -1,0 +1,13 @@
+.login-form {
+  display: inline-block;
+  margin: auto;
+  padding: 15px;
+  background-color: gray;
+}
+
+.login-form input {
+  display: block;
+  width: 200px;
+  margin: 10px;
+  font-size: 20px;
+}
