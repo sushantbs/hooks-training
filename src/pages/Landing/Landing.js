@@ -1,5 +1,7 @@
+// @ts-check
 import React from "react";
 import socketLibrary from "../../lib/socketLibrary";
+import "./Landing.css";
 
 class LandingPage extends React.Component {
 
@@ -10,8 +12,8 @@ class LandingPage extends React.Component {
     postingMessage: false
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.connection = null;
   }
 
@@ -19,10 +21,6 @@ class LandingPage extends React.Component {
     this.setState({
       [stateVar]: stateVal
     })
-  }
-
-  _detectAndHandleEnter() {
-
   }
 
   async componentDidMount() {
@@ -83,9 +81,9 @@ class LandingPage extends React.Component {
             ))
           }
         </div>
-        <div className="">
+        <div className="chat-input">
           <input type="text" value={this.state.inputString} onKeyDown={e => this._detectAndHandleEnter(e)} onChange={e => this.updateState("inputString", e.target.value)} />
-          <input type="button" value="Send" onClick={e => this.postMessage(e)} />
+          <input type="button" value="Send" onClick={e => this.postMessage()} />
         </div>
       </div>
     )

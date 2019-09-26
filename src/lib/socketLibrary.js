@@ -1,3 +1,4 @@
+// @ts-check
 import snarky from "./snarky";
 
 const eventMap = {};
@@ -5,7 +6,7 @@ const MESSAGE = "message";
 const META = "meta";
 
 const socketLibrary = {
-  async connect() {
+  async connect(options) {
     const connection = {
 
       on(event, handler) {

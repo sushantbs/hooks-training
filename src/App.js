@@ -1,3 +1,4 @@
+// @ts-check
 import React from 'react';
 import Login from "./pages/Login/Login";
 import Landing from "./pages/Landing/Landing";
@@ -27,7 +28,7 @@ class App extends React.Component {
           <Route path="/" exact component={Landing} />
         </div>
         {
-          this.state.authComplete && !this.state.isAuthenticated ? <Redirect to="/login" /> : null
+          this.state.authComplete && !this.state.isAuthenticated ? <Redirect to="/" /> : null
         }
       </Router>
     );

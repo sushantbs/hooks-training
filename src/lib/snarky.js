@@ -1,5 +1,6 @@
-const snarky = {
+// @ts-check
 
+const snarky = {
   respondTo(content) {
     return "Hi, I'm snarky!"
   }

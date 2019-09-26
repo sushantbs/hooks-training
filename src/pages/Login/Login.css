@@ -2,12 +2,16 @@
   display: inline-block;
   margin: auto;
   padding: 15px;
-  background-color: gray;
+  margin-top: 30px;
+  width: 400px;
+  background-color: var(--highlight-bgcolor);
+  border-radius: 4px;
 }
 
 .login-form input {
   display: block;
   width: 200px;
-  margin: 10px;
+  height: 30px;
+  margin: 20px auto;
   font-size: 20px;
 }
