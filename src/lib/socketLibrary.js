@@ -28,6 +28,10 @@ const socketLibrary = {
         return {
           success: true
         }
+      },
+
+      disconnect() {
+        return true;
       }
     }
 

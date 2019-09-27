@@ -1,93 +1,80 @@
 // @ts-check
-import React from "react";
+import React, { useState, useEffect } from "react";
 import socketLibrary from "../../lib/socketLibrary";
 import "./Landing.css";
 
-class LandingPage extends React.Component {
+function HomeHook() {
+  const [messages, setMessages] = useState([]);
+  const [inputString, setInputString] = useState("");
+  const [meta, setMeta] = useState(null);
+  const [postingMessage, setPostingMessage] = useState(false);
+  const [connection, setConnection] = useState(null);
 
-  state = {
-    messages: [],
-    inputString: "",
-    meta: null,
-    postingMessage: false
+  const consumeMessage = (msg) => {
+    setMessages([
+      ...messages,
+      msg
+    ])
   }
 
-  constructor(props) {
-    super(props);
-    this.connection = null;
+  const consumeMetadata = (meta) => {
+    setMeta(meta);
   }
 
-  updateState(stateVar, stateVal) {
-    this.setState({
-      [stateVar]: stateVal
-    })
-  }
+  const postMessage = async () => {
+    setPostingMessage(true);
 
-  async componentDidMount() {
-    // make the socket connection
-    this.connection = await socketLibrary.connect({
-      url: "/socket/endpoint"
-    });
-
-    this.connection.on("message", msg => this._consumeMessage(msg));
-    this.connection.on("meta", meta => this._consumeMetadata(meta));
-  }
-
-  async postMessage() {
-    this.setState({
-      postingMessage: true
-    })
-    const resp = await this.connection.post("message", this.state.inputString);
+    const resp = await connection.post("message", inputString);
     if (resp.success) {
-      this.setState({
-        inputString: ""
-      });
+      setInputString("");
     } else {
       // handle post errors here
     }
   }
 
-  _consumeMessage(message) {
-    this.setState({
-      messages: [
-        ...this.state.messages,
-        message
-      ]
-    });
-  }
-
-  _consumeMetadata(meta) {
-    this.setState({
-      meta
-    });
-  }
-
-  _detectAndHandleEnter(e) {
+  const detectAndHandleEnter = (e) => {
     if (e.keyCode === 13) {
-      this.postMessage();
+      postMessage();
     }
   }
 
-  render() {
-    return (
-      <div className="app-container">
-        <div className="chat-container">
-          {
-            this.state.messages.map(message => (
-              <div className={`message ${message.sender === "me" ? `my-message` : `others-message`}`}>
-                <div className="sender-name">{message.sender}</div>
-                <div className="message-content">{message.content}</div>
-              </div>
-            ))
-          }
-        </div>
-        <div className="chat-input">
-          <input type="text" value={this.state.inputString} onKeyDown={e => this._detectAndHandleEnter(e)} onChange={e => this.updateState("inputString", e.target.value)} />
-          <input type="button" value="Send" onClick={e => this.postMessage()} />
-        </div>
-      </div>
-    )
+  const makeSocketConnection = async () => {
+    const conn = await socketLibrary.connect({
+      url: "/socket/endpoint"
+    });
+
+    conn.on("message", msg => consumeMessage(msg));
+    conn.on("meta", meta => consumeMetadata(meta));
+
+    setConnection(conn);
   }
+
+  useEffect(() => {
+
+    makeSocketConnection();
+    return () => {
+      connection.disconnect();
+    }
+  }, []);
+
+  return (
+    <div className="app-container">
+      <div className="chat-container">
+        {
+          messages.map(message => (
+            <div className={`message ${message.sender === "me" ? `my-message` : `others-message`}`}>
+              <div className="sender-name">{message.sender}</div>
+              <div className="message-content">{message.content}</div>
+            </div>
+          ))
+        }
+      </div>
+      <div className="chat-input">
+        <input type="text" value={inputString} onKeyDown={e => detectAndHandleEnter(e)} onChange={e => setInputString(e.target.value)} />
+        <input type="button" value="Send" onClick={e => postMessage()} />
+      </div>
+    </div>
+  )
 }
 
-export default LandingPage
+export default HomeHook;
