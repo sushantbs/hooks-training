@@ -28,7 +28,7 @@ class App extends React.Component {
           <Route path="/" exact component={Landing} />
         </div>
         {
-          this.state.authComplete && !this.state.isAuthenticated ? <Redirect to="/" /> : null
+          this.state.authComplete && !this.state.isAuthenticated ? <Redirect to="/login" /> : null
         }
       </Router>
     );
