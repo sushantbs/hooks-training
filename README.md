@@ -1,4 +1,4 @@
-###The objective
+### The objective
 
 Run the react app built using hooks from the `master` branch, and solve the problem of the chat message getting overwritten.
 
